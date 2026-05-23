@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API = axios.create({
   baseURL:
-"https://video-platform-dcx6.onrender.com/api",
+    "https://video-platform-dcx6.onrender.com/api",
 });
 
 
