@@ -2,6 +2,13 @@ const ffmpeg = require(
   "fluent-ffmpeg"
 );
 
+const ffmpegPath =
+  require("ffmpeg-static");
+
+ffmpeg.setFfmpegPath(
+  ffmpegPath
+);
+
 const fs = require("fs");
 
 const path = require("path");
@@ -16,6 +23,21 @@ const extractFrames =
 
     try {
 
+      // CHECK VIDEO EXISTS
+      if (
+        !fs.existsSync(
+          videoPath
+        )
+      ) {
+
+        console.log(
+          "VIDEO NOT FOUND:",
+          videoPath
+        );
+
+        return [];
+      }
+
       const framesDir =
         path.join(
           process.cwd(),
@@ -24,7 +46,7 @@ const extractFrames =
           "frames"
         );
 
-      // CREATE FOLDER
+      // CREATE FRAMES DIRECTORY
       if (
         !fs.existsSync(
           framesDir
@@ -40,17 +62,24 @@ const extractFrames =
       }
 
       // CLEAR OLD FRAMES
-      fs.readdirSync(
-        framesDir
-      ).forEach((file) => {
+      const oldFrames =
+        fs.readdirSync(
+          framesDir
+        );
+
+      for (const frame of oldFrames) {
 
         fs.unlinkSync(
           path.join(
             framesDir,
-            file
+            frame
           )
         );
-      });
+      }
+
+      console.log(
+        "STARTING FFMPEG..."
+      );
 
       // EXTRACT FRAMES
       await new Promise(
@@ -74,12 +103,27 @@ const extractFrames =
 
             .on(
               "end",
-              resolve
+              () => {
+
+                console.log(
+                  "FRAME EXTRACTION DONE"
+                );
+
+                resolve();
+              }
             )
 
             .on(
               "error",
-              reject
+              (err) => {
+
+                console.log(
+                  "FFMPEG ERROR:",
+                  err
+                );
+
+                reject(err);
+              }
             );
         }
       );
@@ -89,11 +133,19 @@ const extractFrames =
           framesDir
         );
 
+      console.log(
+        "FRAMES:",
+        frames
+      );
+
       return frames;
 
     } catch (error) {
 
-      console.log(error);
+      console.log(
+        "EXTRACT ERROR:",
+        error
+      );
 
       return [];
     }
@@ -101,28 +153,39 @@ const extractFrames =
 
 
 // ==========================
-// MODERATE FRAMES
+// MODERATION
 // ==========================
 
 const moderateFrames =
   async (frames) => {
 
-    console.log(
-      "Analyzing Frames:",
-      frames
-    );
+    try {
 
-    // SIMULATED MODERATION
+      console.log(
+        "MODERATING:",
+        frames
+      );
 
-    const random =
-      Math.random();
+      // SIMULATED MODERATION
+      const random =
+        Math.random();
 
-    if (random > 0.7) {
+      if (random > 0.7) {
 
-      return "flagged";
+        return "flagged";
+      }
+
+      return "safe";
+
+    } catch (error) {
+
+      console.log(
+        "MODERATION ERROR:",
+        error
+      );
+
+      return "safe";
     }
-
-    return "safe";
   };
 
 
