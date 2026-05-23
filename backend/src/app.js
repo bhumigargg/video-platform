@@ -8,30 +8,20 @@ const videoRoutes = require("./routes/video.routes");
 
 const adminRoutes = require("./routes/admin.routes");
 
-
 const app = express();
 
-
-// IMPORTANT
 app.use(express.json());
 
 
-// CORS
+// FIXED CORS
 app.use(
   cors({
-
-    origin: [
-      "http://localhost:5173",
-
-      "https://video-platform-rosy-psi.vercel.app/",
-    ],
-
+    origin: true,
     credentials: true,
   })
 );
 
 
-// ROUTES
 app.use(
   "/api/auth",
   authRoutes
@@ -46,6 +36,5 @@ app.use(
   "/api/admin",
   adminRoutes
 );
-
 
 module.exports = app;
