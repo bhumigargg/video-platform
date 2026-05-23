@@ -89,9 +89,9 @@ const fileFilter = (
 
 
 // MULTER EXPORT
-module.exports = multer({
-
+const upload = multer({
   storage,
-
   fileFilter,
 });
+
+module.exports = upload;
