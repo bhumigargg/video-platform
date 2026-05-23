@@ -319,6 +319,191 @@ DELETE /api/admin/users/:id
 
 # User Manual
 
+# Video Management & Content Moderation Platform
+
+This platform allows users to upload, stream, manage, and monitor video content with role-based access control and real-time processing updates.
+
+---
+
+# Getting Started
+
+## 1. Open the Application
+
+Visit the deployed frontend URL in your browser.
+
+Example:
+
+```text
+https://your-project.vercel.app
+```
+
+---
+
+# Authentication
+
+## Register
+
+1. Open the Register page
+2. Fill in:
+   - Name
+   - Email
+   - Password
+   - Tenant ID
+   - Role
+3. Click **Register**
+
+### Available Roles
+
+| Role | Description |
+|---|---|
+| Viewer | Can only watch videos |
+| Editor | Can upload and manage videos |
+| Admin | Full system access |
+
+---
+
+## Login
+
+1. Open Login page
+2. Enter:
+   - Email
+   - Password
+3. Click **Login**
+
+After successful login:
+- JWT token is stored securely
+- User is redirected to dashboard
+
+---
+
+# Dashboard
+
+The dashboard displays:
+- Uploaded videos
+- Processing status
+- Sensitivity classification
+- Streaming player
+
+Each video card contains:
+- Video preview
+- Title
+- Progress bar
+- Sensitivity badge
+- Processing status
+
+---
+
+# Uploading Videos
+
+## Allowed Roles
+- Editor
+- Admin
+
+## Steps
+
+1. Click **Upload Video**
+2. Select an MP4 video file
+3. Enter title (optional)
+4. Submit upload
+
+The platform will:
+- upload video
+- process content
+- extract frames
+- classify sensitivity
+- update progress in real time
+
+---
+
+# Real-Time Processing
+
+Processing updates are displayed live using Socket.io.
+
+Status updates include:
+- upload started
+- processing percentage
+- completion status
+- sensitivity classification
+
+---
+
+# Sensitivity Classification
+
+Videos are classified as:
+
+| Status | Meaning |
+|---|---|
+| Safe | No sensitive content detected |
+| Flagged | Potential sensitive content detected |
+| Processing | Analysis in progress |
+
+---
+
+# Video Streaming
+
+Users can stream uploaded videos directly from dashboard.
+
+Features:
+- HTTP range streaming
+- Fast loading
+- Seek support
+- Browser-compatible playback
+
+---
+
+# Admin Panel
+
+## Allowed Role
+- Admin only
+
+## Features
+
+Admins can:
+- View all users in same tenant
+- Change user roles
+- Delete users
+- Manage platform access
+
+---
+
+# Multi-Tenant Access
+
+Users can only access:
+- videos
+- users
+- resources
+
+belonging to their own tenant.
+
+This ensures data isolation between organizations.
+
+---
+
+
+# Supported Formats
+
+| Type | Supported |
+|---|---|
+| Video | MP4 |
+
+---
+
+# Logout
+
+To logout:
+1. Clear local session
+2. Return to login page
+
+---
+
+# Technical Notes
+
+- Authentication uses JWT
+- MongoDB stores metadata
+- Videos are streamed using HTTP range requests
+- FFmpeg handles frame extraction
+- Socket.io handles live updates
+
 # User Roles
 
 | Role | Permissions |
