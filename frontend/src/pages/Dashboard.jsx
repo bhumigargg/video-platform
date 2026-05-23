@@ -5,7 +5,8 @@ import API from "../api/axios";
 
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+const BACKEND_URL = "https://video-platform-dcx6.onrender.com";
+const socket = io(BACKEND_URL);
 
 const Dashboard = () => {
 
@@ -134,7 +135,7 @@ const Dashboard = () => {
                 className="w-full h-56 object-cover bg-black"
               >
                 <source
-                  src={`http://localhost:5000/api/videos/stream/${video._id}`}
+                  src={`${BACKEND_URL}/api/videos/stream/${video._id}`}
                   type="video/mp4"
                 />
               </video>
