@@ -1,50 +1,97 @@
 const multer = require("multer");
+
 const path = require("path");
 
-const storage = multer.diskStorage({
-  destination: function (
+const fs = require("fs");
+
+
+// CREATE UPLOAD DIRECTORY
+const uploadPath = path.join(
+  process.cwd(),
+  "src",
+  "uploads",
+  "raw"
+);
+
+if (
+  !fs.existsSync(
+    uploadPath
+  )
+) {
+
+  fs.mkdirSync(
+    uploadPath,
+    {
+      recursive: true,
+    }
+  );
+}
+
+
+// STORAGE CONFIG
+const storage =
+  multer.diskStorage({
+
+    destination: function (
+      req,
+      file,
+      cb
+    ) {
+
+      cb(
+        null,
+        uploadPath
+      );
+    },
+
+    filename: function (
+      req,
+      file,
+      cb
+    ) {
+
+      cb(
+        null,
+        Date.now() +
+          path.extname(
+            file.originalname
+          )
+      );
+    },
+  });
+
+
+// FILE FILTER
+const fileFilter = (
   req,
   file,
   cb
-) {
-
-  const uploadPath =
-    "src/uploads/raw";
+) => {
 
   if (
-    !fs.existsSync(
-      uploadPath
+    file.mimetype.startsWith(
+      "video"
     )
   ) {
 
-    fs.mkdirSync(
-      uploadPath,
-      {
-        recursive: true,
-      }
-    );
-  }
-
-  cb(null, uploadPath);
-},
-});
-
-const fileFilter = (req, file, cb) => {
-  const allowed = ["video/mp4", "video/mkv", "video/webm"];
-
-  if (allowed.includes(file.mimetype)) {
     cb(null, true);
+
   } else {
-    cb(new Error("Invalid file type"));
+
+    cb(
+      new Error(
+        "Only video files allowed"
+      ),
+      false
+    );
   }
 };
 
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: {
-    fileSize: 1024 * 1024 * 500,
-  },
-});
 
-module.exports = upload;
+// MULTER EXPORT
+module.exports = multer({
+
+  storage,
+
+  fileFilter,
+});
