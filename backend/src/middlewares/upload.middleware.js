@@ -2,13 +2,31 @@ const multer = require("multer");
 const path = require("path");
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "src/uploads/raw");
-  },
+  destination: function (
+  req,
+  file,
+  cb
+) {
 
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
+  const uploadPath =
+    "src/uploads/raw";
+
+  if (
+    !fs.existsSync(
+      uploadPath
+    )
+  ) {
+
+    fs.mkdirSync(
+      uploadPath,
+      {
+        recursive: true,
+      }
+    );
+  }
+
+  cb(null, uploadPath);
+},
 });
 
 const fileFilter = (req, file, cb) => {

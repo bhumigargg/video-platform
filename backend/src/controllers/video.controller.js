@@ -12,7 +12,26 @@ const {
 } = require(
   "../services/moderation.service"
 );
+const uploadDir = path.join(
+  process.cwd(),
+  "src",
+  "uploads",
+  "raw"
+);
 
+if (
+  !fs.existsSync(
+    uploadDir
+  )
+) {
+
+  fs.mkdirSync(
+    uploadDir,
+    {
+      recursive: true,
+    }
+  );
+}
 
 // ==========================
 // Upload Video
