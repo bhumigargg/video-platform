@@ -2,34 +2,33 @@ const express = require("express");
 
 const cors = require("cors");
 
+const authRoutes = require("./routes/auth.routes");
+
+const videoRoutes = require("./routes/video.routes");
+
+const adminRoutes = require("./routes/admin.routes");
+
+
 const app = express();
 
 
-// ROUTES
-const authRoutes = require(
-  "./routes/auth.routes"
-);
-
-const videoRoutes = require(
-  "./routes/video.routes"
-);
-
-const adminRoutes = require(
-  "./routes/admin.routes"
-);
+// IMPORTANT
+app.use(express.json());
 
 
-// MIDDLEWARES
+// CORS
 app.use(
   cors({
-    origin:
+
+    origin: [
       "http://localhost:5173",
+
+      "https://video-platform-rosy-psi.vercel.app/",
+    ],
 
     credentials: true,
   })
 );
-
-app.use(express.json());
 
 
 // ROUTES
