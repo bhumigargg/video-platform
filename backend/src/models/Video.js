@@ -14,12 +14,12 @@ const videoSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["uploaded", "processing", "completed", "failed"],
-      default: "uploaded",
+      default: "processing",
     },
     sensitivity: {
       type: String,
-      enum: ["safe", "flagged"],
-      default: "safe",
+      enum: ["safe", "flagged","processing"],
+      default: "processing",
     },
     progress: {
       type: Number,
