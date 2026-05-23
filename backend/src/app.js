@@ -20,22 +20,11 @@ const adminRoutes = require(
 
 
 // MIDDLEWARES
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3000",
-  process.env.FRONTEND_URL,
-  "https://video-platform-rosy-psi.vercel.app",
-].filter(Boolean);
-
 app.use(
   cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS not allowed"));
-      }
-    },
+    origin:
+      "http://localhost:5173",
+
     credentials: true,
   })
 );
