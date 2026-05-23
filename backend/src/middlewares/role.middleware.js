@@ -1,4 +1,4 @@
-module.exports = (roles) => {
+module.exports = (...roles) => {
 
   return (
     req,
@@ -18,6 +18,9 @@ module.exports = (roles) => {
     ) {
 
       return res.status(403).json({
+
+        success: false,
+
         message:
           "Access denied",
       });
