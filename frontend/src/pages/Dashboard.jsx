@@ -81,46 +81,55 @@ const Dashboard = () => {
 );
 
   return (
-    <div className="flex justify-between items-center mb-10">
+    <div className="min-h-screen bg-gray-950 text-white p-8">
 
-      <div>
+      <div className="mb-10">
 
-        <h1 className="text-5xl font-bold">
-          Video Moderation Platform
-        </h1>
+  <div className="flex justify-between items-center mb-8">
 
-        <p className="text-gray-400 mt-2">
-          Manage, analyze and stream videos
-        </p>
+    <div>
 
-      </div>
+      <h1 className="text-4xl font-bold">
+        Video Dashboard
+      </h1>
 
-      <div className="flex gap-4">
+      <p className="text-gray-400 mt-2">
+        Manage and moderate videos
+      </p>
 
-        {user?.role !== "viewer" && (
+    </div>
 
-          <a
-  href="/upload"
-  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-semibold"
->
-  <FaUpload />
-  Upload Video
-</a>
+    <div className="flex gap-3">
 
-        )}
+      {user?.role !== "viewer" && (
+        <a
+          href="/upload"
+          className="bg-blue-600 px-5 py-3 rounded-xl"
+        >
+          Upload Video
+        </a>
+      )}
 
-        {user?.role === "admin" && (
+      {user?.role === "admin" && (
+        <a
+          href="/admin"
+          className="bg-purple-600 px-5 py-3 rounded-xl"
+        >
+          Admin Panel
+        </a>
+      )}
 
-          <a
-            href="/admin"
-            className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl font-semibold"
-          >
-            Admin Panel
-          </a>
+    </div>
 
-        )}
+  </div>
 
-      </div>
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+    {/* stats cards here */}
+
+  </div>
+
+</div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
 
@@ -215,7 +224,6 @@ const Dashboard = () => {
               border border-gray-800
               hover:border-blue-500
               hover:shadow-blue-500/20
-              hover:scale-[1.02]
               transition-all
               duration-300
               shadow-xl
@@ -226,7 +234,7 @@ const Dashboard = () => {
                 controls
                 className="
                 w-full
-                h-64
+                h-56
                 object-cover
                 bg-black
                 "
