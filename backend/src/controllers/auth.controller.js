@@ -4,7 +4,13 @@ const bcrypt = require("bcryptjs");
 
 const jwt = require("jsonwebtoken");
 
+module.exports = async (req, res, next) => {
 
+  console.log("AUTH HEADER:");
+  console.log(req.headers.authorization);
+
+
+}
 // REGISTER
 exports.register = async (
   req,
