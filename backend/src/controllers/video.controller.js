@@ -155,10 +155,18 @@ const simulateProcessing =
             );
 
             // GET VIDEO
+            console.log(
+            "USER TENANT:",
+            req.user.tenantId
+          );
             const video =
               await Video.findById(
                 videoId
               );
+              console.log(
+              "VIDEOS FOUND:",
+              videos.length
+            );
 
             if (!video) {
               return;
