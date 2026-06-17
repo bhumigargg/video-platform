@@ -155,18 +155,12 @@ const simulateProcessing =
             );
 
             // GET VIDEO
-            console.log(
-            "USER TENANT:",
-            req.user.tenantId
-          );
+            
             const video =
               await Video.findById(
                 videoId
               );
-              console.log(
-              "VIDEOS FOUND:",
-              videos.length
-            );
+              
 
             if (!video) {
               return;
@@ -411,6 +405,10 @@ exports.streamVideo =
         await Video.findById(
           req.params.id
         );
+        console.log(
+  "STREAM VIDEO:",
+  video
+);
 
       if (!video) {
 
@@ -433,6 +431,15 @@ exports.streamVideo =
 
           video.filename
         );
+        console.log(
+  "VIDEO PATH:",
+  videoPath
+);
+
+console.log(
+  "FILE EXISTS:",
+  fs.existsSync(videoPath)
+);
 
       if (
         !fs.existsSync(
