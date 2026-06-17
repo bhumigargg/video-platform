@@ -4,6 +4,11 @@ import React, { useEffect, useState } from "react";
 import API from "../api/axios";
 
 import { io } from "socket.io-client";
+import {
+  FaVideo,
+  FaUpload,
+  FaShieldAlt,
+} from "react-icons/fa";
 
 const BACKEND_URL = "https://video-platform-dcx6.onrender.com";
 const socket = io(BACKEND_URL);
@@ -76,36 +81,112 @@ const Dashboard = () => {
 );
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-8">
+    <div className="flex justify-between items-center mb-10">
 
-      <div className="flex items-center justify-between mb-8">
+      <div>
 
-        <h1 className="text-4xl font-bold">
-          Video Dashboard
+        <h1 className="text-5xl font-bold">
+          Video Moderation Platform
         </h1>
+
+        <p className="text-gray-400 mt-2">
+          Manage, analyze and stream videos
+        </p>
+
+      </div>
+
+      <div className="flex gap-4">
 
         {user?.role !== "viewer" && (
 
-  <a
-    href="/upload"
-    className="bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-xl font-semibold transition"
-  >
-    Upload Video
-  </a>
+          <a
+  href="/upload"
+  className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-xl font-semibold"
+>
+  <FaUpload />
+  Upload Video
+</a>
 
-)}
-{user?.role === "admin" && (
+        )}
 
-  <a
-    href="/admin"
-    className="bg-green-600 hover:bg-green-700 px-5 py-3 rounded-xl font-semibold transition ml-4"
-  >
-    Admin Panel
-  </a>
+        {user?.role === "admin" && (
 
-)}
+          <a
+            href="/admin"
+            className="bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-xl font-semibold"
+          >
+            Admin Panel
+          </a>
+
+        )}
 
       </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+
+  <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+    <div className="flex items-center gap-2 text-gray-400">
+  <FaVideo />
+  <span>Total Videos</span>
+</div>
+
+    <h2 className="text-3xl font-bold">
+      {videos.length}
+    </h2>
+  </div>
+
+  <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+    <div className="flex items-center gap-2 text-green-400">
+  <FaShieldAlt />
+  <span>Safe Videos</span>
+</div>
+
+    <h2 className="text-3xl font-bold">
+      {
+        videos.filter(
+          v =>
+            v.sensitivity ===
+            "safe"
+        ).length
+      }
+    </h2>
+  </div>
+
+  <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+    <p className="text-red-400">
+      Flagged Videos
+    </p>
+
+    <h2 className="text-3xl font-bold">
+      {
+        videos.filter(
+          v =>
+            v.sensitivity ===
+            "flagged"
+        ).length
+      }
+    </h2>
+  </div>
+
+  <div className="bg-gray-900 p-6 rounded-2xl border border-gray-800">
+    <div className="flex items-center gap-2 text-yellow-400">
+  <FaUpload />
+  <span>Processing</span>
+</div>
+
+    <h2 className="text-3xl font-bold">
+      {
+        videos.filter(
+          v =>
+            v.status ===
+            "processing"
+        ).length
+      }
+    </h2>
+  </div>
+
+</div>
+
 
       {videos.length === 0 ? (
 
@@ -127,12 +208,28 @@ const Dashboard = () => {
 
             <div
               key={video._id}
-              className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 shadow-lg"
+              className="
+              bg-gray-900
+              rounded-3xl
+              overflow-hidden
+              border border-gray-800
+              hover:border-blue-500
+              hover:shadow-blue-500/20
+              hover:scale-[1.02]
+              transition-all
+              duration-300
+              shadow-xl
+              "
             >
 
               <video
                 controls
-                className="w-full h-56 object-cover bg-black"
+                className="
+                w-full
+                h-64
+                object-cover
+                bg-black
+                "
               >
                 <source
                   src={`${BACKEND_URL}/api/videos/stream/${video._id}`}
