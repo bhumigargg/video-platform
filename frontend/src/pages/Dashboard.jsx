@@ -12,13 +12,13 @@ import {
 
 const BACKEND_URL = "https://video-platform-dcx6.onrender.com";
 const socket = io(BACKEND_URL);
-const [menuOpen,
-  setMenuOpen] =
-  useState(false);
+
 const Dashboard = () => {
 
   const [videos, setVideos] = useState([]);
-
+  const [menuOpen,
+  setMenuOpen] =
+  useState(false);
   const fetchVideos = async () => {
 
     try {
