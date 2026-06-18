@@ -45,7 +45,8 @@ exports.uploadVideo = async (
   try {
 
     const file = req.file;
-
+    console.log("FILE OBJECT:");
+console.log(req.file);
     if (!file) {
 
       return res.status(400).json({
