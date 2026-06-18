@@ -12,7 +12,9 @@ import {
 
 const BACKEND_URL = "https://video-platform-dcx6.onrender.com";
 const socket = io(BACKEND_URL);
-
+const [menuOpen,
+  setMenuOpen] =
+  useState(false);
 const Dashboard = () => {
 
   const [videos, setVideos] = useState([]);
@@ -30,6 +32,18 @@ const Dashboard = () => {
       console.log(error);
     }
   };
+  const handleLogout = () => {
+
+  localStorage.removeItem(
+    "token"
+  );
+
+  localStorage.removeItem(
+    "user"
+  );
+
+  window.location.href = "/";
+};
 
   useEffect(() => {
 
@@ -101,23 +115,53 @@ const Dashboard = () => {
 
     <div className="flex gap-3">
 
-      {user?.role !== "viewer" && (
-        <a
-          href="/upload"
-          className="bg-blue-600 px-5 py-3 rounded-xl"
-        >
-          Upload Video
-        </a>
-      )}
+      <div className="relative">
+
+  <button
+    onClick={() =>
+      setMenuOpen(
+        !menuOpen
+      )
+    }
+    className="bg-blue-600 px-5 py-3 rounded-xl"
+  >
+    Menu ▼
+  </button>
+
+  {menuOpen && (
+
+    <div className="absolute right-0 mt-2 w-48 bg-gray-900 border border-gray-700 rounded-xl shadow-lg z-50">
+
+      <a
+        href="/upload"
+        className="block px-4 py-3 hover:bg-gray-800"
+      >
+        Upload Video
+      </a>
 
       {user?.role === "admin" && (
+
         <a
           href="/admin"
-          className="bg-purple-600 px-5 py-3 rounded-xl"
+          className="block px-4 py-3 hover:bg-gray-800"
         >
           Admin Panel
         </a>
+
       )}
+
+      <button
+        onClick={handleLogout}
+        className="block w-full text-left px-4 py-3 text-red-400 hover:bg-gray-800"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  )}
+
+</div>
 
     </div>
 
