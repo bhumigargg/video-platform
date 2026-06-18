@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 const videoSchema = new mongoose.Schema(
   {
+    videoUrl: String,
+cloudinaryId: String,
     title: String,
     filename: String,
     originalName: String,

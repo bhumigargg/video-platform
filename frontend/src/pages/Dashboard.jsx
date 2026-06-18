@@ -240,9 +240,9 @@ const Dashboard = () => {
                 "
               >
                 <source
-                  src={`${BACKEND_URL}/api/videos/stream/${video._id}`}
-                  type="video/mp4"
-                />
+                    src={video.videoUrl}
+                    type="video/mp4"
+                  />
               </video>
 
               <div className="p-5">

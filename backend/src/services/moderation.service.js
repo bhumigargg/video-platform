@@ -92,7 +92,7 @@ const extractFrames =
 
             .screenshots({
 
-              count: 5,
+              count: 3,
 
               folder:
                 framesDir,

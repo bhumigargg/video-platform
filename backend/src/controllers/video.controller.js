@@ -54,36 +54,27 @@ exports.uploadVideo = async (
       });
     }
 
-    const video =
-      await Video.create({
+    const video = await Video.create({
+      title: req.body.title || file.originalname,
 
-        title:
-          req.body.title ||
-          file.originalname,
+      videoUrl: file.path,
 
-        filename:
-          file.filename,
+      cloudinaryId: file.filename,
 
-        originalName:
-          file.originalname,
+      originalName: file.originalname,
 
-        size:
-          file.size,
+      size: file.size,
 
-        uploadedBy:
-          req.user.id,
+      uploadedBy: req.user.id,
 
-        tenantId:
-          req.user.tenantId,
+      tenantId: req.user.tenantId,
 
-        status:
-          "processing",
+      status: "processing",
 
-        progress: 0,
+      progress: 0,
 
-        sensitivity:
-          "processing",
-      });
+      sensitivity: "processing",
+    });
 
     // START PROCESSING
     simulateProcessing(
@@ -193,10 +184,18 @@ const simulateProcessing =
             );
 
             // MODERATE
-            const sensitivity =
-              await moderateFrames(
-                frames
-              );
+            const framePath = frames[0];
+
+const result =
+  await axios.post(
+    process.env.MODERATION_URL,
+    {
+      image: framePath,
+    }
+  );
+
+const sensitivity =
+  result.data.sensitivity;
 
             console.log(
               "SENSITIVITY:",
@@ -396,144 +395,3 @@ exports.deleteVideo =
 // STREAM VIDEO
 // ==========================
 
-exports.streamVideo =
-  async (req, res) => {
-
-    try {
-
-      const video =
-        await Video.findById(
-          req.params.id
-        );
-        console.log(
-  "STREAM VIDEO:",
-  video
-);
-
-      if (!video) {
-
-        return res.status(404).json({
-          message:
-            "Video not found",
-        });
-      }
-
-      const videoPath =
-        path.join(
-
-          process.cwd(),
-
-          "src",
-
-          "uploads",
-
-          "raw",
-
-          video.filename
-        );
-        console.log(
-  "VIDEO PATH:",
-  videoPath
-);
-
-console.log(
-  "FILE EXISTS:",
-  fs.existsSync(videoPath)
-);
-
-      if (
-        !fs.existsSync(
-          videoPath
-        )
-      ) {
-
-        return res.status(404).json({
-          message:
-            "Video file missing",
-        });
-      }
-
-      const stat =
-        fs.statSync(
-          videoPath
-        );
-
-      const fileSize =
-        stat.size;
-
-      const range =
-        req.headers.range;
-
-      if (!range) {
-
-        return res.status(400).send(
-          "Requires Range header"
-        );
-      }
-
-      const parts =
-        range
-          .replace(
-            /bytes=/,
-            ""
-          )
-          .split("-");
-
-      const start =
-        parseInt(
-          parts[0],
-          10
-        );
-
-      const end =
-        parts[1]
-          ? parseInt(
-              parts[1],
-              10
-            )
-          : fileSize - 1;
-
-      const chunkSize =
-        end - start + 1;
-
-      const file =
-        fs.createReadStream(
-          videoPath,
-          {
-            start,
-            end,
-          }
-        );
-
-      const headers = {
-
-        "Content-Range":
-          `bytes ${start}-${end}/${fileSize}`,
-
-        "Accept-Ranges":
-          "bytes",
-
-        "Content-Length":
-          chunkSize,
-
-        "Content-Type":
-          "video/mp4",
-      };
-
-      res.writeHead(
-        206,
-        headers
-      );
-
-      file.pipe(res);
-
-    } catch (error) {
-
-      console.log(error);
-
-      res.status(500).json({
-        message:
-          error.message,
-      });
-    }
-  };

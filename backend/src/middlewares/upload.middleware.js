@@ -1,97 +1,21 @@
 const multer = require("multer");
-
-const path = require("path");
-
-const fs = require("fs");
-
-
-// CREATE UPLOAD DIRECTORY
-const uploadPath = path.join(
-  process.cwd(),
-  "src",
-  "uploads",
-  "raw"
+const {
+  CloudinaryStorage,
+} = require(
+  "multer-storage-cloudinary"
 );
 
-if (
-  !fs.existsSync(
-    uploadPath
-  )
-) {
+const cloudinary =
+  require("../config/cloudinary");
 
-  fs.mkdirSync(
-    uploadPath,
-    {
-      recursive: true,
-    }
-  );
-}
-
-
-// STORAGE CONFIG
 const storage =
-  multer.diskStorage({
-
-    destination: function (
-      req,
-      file,
-      cb
-    ) {
-
-      cb(
-        null,
-        uploadPath
-      );
-    },
-
-    filename: function (
-      req,
-      file,
-      cb
-    ) {
-
-      cb(
-        null,
-        Date.now() +
-          path.extname(
-            file.originalname
-          )
-      );
+  new CloudinaryStorage({
+    cloudinary,
+    params: {
+      folder: "videos",
+      resource_type: "video",
     },
   });
 
-
-// FILE FILTER
-const fileFilter = (
-  req,
-  file,
-  cb
-) => {
-
-  if (
-    file.mimetype.startsWith(
-      "video"
-    )
-  ) {
-
-    cb(null, true);
-
-  } else {
-
-    cb(
-      new Error(
-        "Only video files allowed"
-      ),
-      false
-    );
-  }
-};
-
-
-// MULTER EXPORT
-const upload = multer({
-  storage,
-  fileFilter,
-});
-
-module.exports = upload;
+module.exports =
+  multer({ storage });
